@@ -1,6 +1,6 @@
 import telebot 
+import wildber
 bot = telebot.TeleBot('5107243266:AAGCPndiARlwga4h3Bg4gHD6WLYagO1KFUY')
-#@bot.message_handler(content_types=['text'])
 
 @bot.message_handler(commands=['start'])
 def start_message(message):
@@ -21,29 +21,22 @@ def start(message):
 
 def brand(message):
     art = message.text
-    bot.send_message(message.from_user.id, 'Ваш артикул - '+ str(art))
-    bot.send_message(message.from_user.id, 'Нажмите /start, чтобы начать сначала')
-
-
+    if art.isdigit():
+        url = 'https://www.wildberries.ru/catalog/' + str(art) + '/detail.aspx'
+        inf = wildber.parser(url, 1)
+        bot.send_message(message.from_user.id, 'Наименование бренда - "' + str(inf) + '"')
+        bot.send_message(message.from_user.id, 'Нажмите /start, чтобы начать сначала')
+    else:
+        bot.send_message(message.from_user.id, 'Неверный артикул! Нажмите /start, чтобы начать сначала')
+    
 def title(message):
     art = message.text
-    bot.send_message(message.from_user.id, 'Ваш артикул - '+ str(art))
-    bot.send_message(message.from_user.id, 'Нажмите /start, чтобы начать сначала')
-
-
-# def artbrand(message):
-#     a = message.text
-#     bot.send_message(message.from_user.id, 'БРЕНД')
-#     bot.register_next_step_handler(message, start)
-
-# def artbrand(message):
-#     a = message.text
-#     bot.send_message(message.from_user.id, 'БРЕНД')
-#     bot.register_next_step_handler(message, start)
-
-# def arttitle(message):
-#     b = message.text
-#     bot.send_message(message.from_user.id, 'НАЗВАНИЕ')
-#     bot.register_next_step_handler(message, start)
+    if art.isdigit():
+        url = 'https://www.wildberries.ru/catalog/' + str(art) + '/detail.aspx'
+        inf = wildber.parser(url, 2)
+        bot.send_message(message.from_user.id, 'Наименование товара - "' + str(inf) + '"')
+        bot.send_message(message.from_user.id, 'Нажмите /start, чтобы начать сначала')
+    else:
+        bot.send_message(message.from_user.id, 'Неверный артикул! Нажмите /start, чтобы начать сначала')
 
 bot.infinity_polling()
